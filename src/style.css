@@ -1,0 +1,137 @@
+:root {
+  /* Box sizing reset */
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+:root {
+  /* Colors */
+  --color-bg: #f2f0e9;
+  --color-text-main: #2c2c2c;
+  --color-text-sub: #5a5a5a;
+  --color-accent-primary: #5c6b48;
+  /* Olive Green */
+  --color-accent-secondary: #cba36b;
+  /* Warm Gold */
+  --color-surface: #ffffff;
+  --color-danger: #d96c6c;
+  --color-success: #6cd988;
+
+  /* Typography */
+  --font-heading: 'Libre Baskerville', serif;
+  --font-body: 'Nunito', sans-serif;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 64px;
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(44, 44, 44, 0.08);
+}
+
+/* Paper Texture */
+body {
+  background-color: var(--color-bg);
+  /* Realistic Paper Texture: Turbulence + Diffuse Lighting */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' opacity='0.2'%3E%3Cfilter id='paper' x='0%25' y='0%25' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' result='noise'/%3E%3CfeDiffuseLighting in='noise' lighting-color='white' surfaceScale='2'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)'/%3E%3C/svg%3E");
+  background-blend-mode: multiply;
+  color: var(--color-text-main);
+  font-family: var(--font-body);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--color-text-main);
+}
+
+p {
+  line-height: 1.6;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-sub);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-body);
+  transition: all 0.2s ease;
+}
+
+/* Utilities */
+.container {
+  max-width: 480px;
+  /* Mobile focused */
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Component Specific Globals if needed */
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.7s ease-out forwards;
+}
