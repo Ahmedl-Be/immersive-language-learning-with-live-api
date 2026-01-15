@@ -16,7 +16,7 @@ Immergo is an immersive language learning application powered by the Google Gemi
 
 ## Features
 
--   **Missions & Roleplay**: Choose from structured scenarios with specific objectives.
+-   **Missions & Roleplay**: Chose from structured scenarios with specific objectives.
 -   **Learning Modes**:
     -   **Teacher Mode**: Get helpful explanations and translations in your native language.
     -   **Immersive Mode**: Strict "No Free Rides" policy where you must speak the target language to proceed.

@@ -47,161 +47,222 @@ class ViewMissions extends HTMLElement {
     `;
 
     this.innerHTML = `
-      <div class="container">
-        <h2 style="margin-top: var(--spacing-xl);">Select Mission</h2>
-        
-        <div style="
-          margin-bottom: var(--spacing-lg); 
-          background: white; 
-          padding: var(--spacing-lg); 
-          border-radius: var(--radius-lg); 
-          border: 1px solid #ddd;
-          box-shadow: var(--shadow-sm);
+      <div class="container" style="max-width: 1000px;">
+        <!-- HUD Panel -->
+        <div class="hud-panel glass-panel" style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-xl);
+            padding: var(--spacing-lg);
+            align-items: start;
+            max-width: 900px;
+            margin: 0 auto var(--spacing-xxl) auto;
         ">
-          <label style="display: block; font-weight: bold; margin-bottom: var(--spacing-md); color: var(--color-accent-primary);">Target Language</label>
-          
-          <div style="display: flex; align-items: center; gap: var(--spacing-md);">
-            <div style="flex: 1;">
-              <label style="display: block; font-size: 0.8rem; margin-bottom: 4px; opacity: 0.7;">I speak (Native)</label>
-              <select id="from-lang" style="
-                width: 100%;
-                padding: var(--spacing-md);
-                border: 2px solid #eee;
-                border-radius: var(--radius-md);
-                background: #f9f9f9;
-                font-family: var(--font-body);
-                font-size: 1rem;
-                appearance: none;
-                cursor: pointer;
-              ">
-                ${options}
-              </select>
+            <!-- Native Language Column -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="
+                    font-size: 0.8rem;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    color: var(--color-text-sub);
+                    font-weight: 700;
+                    margin-left: 4px;
+                ">I speak</label>
+                <div style="position: relative;">
+                     <select id="from-lang" style="
+                        width: 100%;
+                        padding: 12px 16px;
+                        border: var(--glass-border);
+                        border-radius: var(--radius-md);
+                        background: var(--color-surface);
+                        color: var(--color-text-main);
+                        font-family: var(--font-body);
+                        font-weight: 600;
+                        appearance: none;
+                        cursor: pointer;
+                        font-size: 1rem;
+                        transition: all 0.2s;
+                     " onmouseover="this.style.background='var(--color-bg)'" onmouseout="this.style.background='var(--color-surface)'">
+                        ${options}
+                     </select>
+                     <div style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; opacity: 0.5;">▼</div>
+                </div>
+            </div>
+            
+            <!-- Target Language Column -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="
+                    font-size: 0.8rem; 
+                    text-transform: uppercase; 
+                    letter-spacing: 1px; 
+                    color: var(--color-accent-secondary);
+                    font-weight: 700;
+                    margin-left: 4px;
+                ">I want to learn</label>
+                <div style="position: relative;">
+                    <select id="to-lang" style="
+                        width: 100%;
+                        padding: 12px 16px;
+                        border: 1px solid var(--color-accent-secondary);
+                        border-radius: var(--radius-md);
+                        background: var(--color-surface);
+                        color: var(--color-text-main);
+                        font-family: var(--font-body);
+                        font-weight: 700;
+                        appearance: none;
+                        cursor: pointer;
+                        font-size: 1rem;
+                        box-shadow: var(--shadow-sm);
+                        transition: all 0.2s;
+                    " onmouseover="this.style.background='var(--color-bg)'" onmouseout="this.style.background='var(--color-surface)'">
+                        ${options}
+                    </select>
+                     <div style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--color-accent-secondary);">▼</div>
+                </div>
             </div>
 
-            <div style="font-size: 1.2rem; margin-top: 20px; opacity: 0.3;">→</div>
-
-            <div style="flex: 1;">
-              <label style="display: block; font-size: 0.8rem; margin-bottom: 4px; opacity: 0.7;">I want to practice</label>
-              <select id="to-lang" style="
-                width: 100%;
-                padding: var(--spacing-md);
-                border: 2px solid var(--color-accent-secondary);
-                border-radius: var(--radius-md);
-                background: white;
-                font-family: var(--font-body);
-                font-size: 1.1rem;
-                font-weight: bold;
-                appearance: none;
-                cursor: pointer;
-                box-shadow: 0 2px 4px rgba(203, 163, 107, 0.2);
-              ">
-                ${options}
-              </select>
+            <!-- Mode Selection (Full Width Row) -->
+            <div style="grid-column: 1 / -1; margin-top: var(--spacing-md); padding-top: var(--spacing-lg); border-top: 1px solid rgba(255,255,255,0.05);">
+                 <label style="
+                    display: block;
+                    font-size: 0.8rem; 
+                    text-transform: uppercase; 
+                    letter-spacing: 1px; 
+                    color: var(--color-text-sub);
+                    font-weight: 700;
+                    margin-bottom: 12px;
+                    margin-left: 4px;
+                ">Select Experience Mode</label>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md);">
+                    <button id="mode-teacher" class="mode-btn" style="
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        padding: 16px; 
+                        border-radius: var(--radius-md); 
+                        border: 1px solid transparent; 
+                        background: rgba(255,255,255,0.03); 
+                        color: var(--color-text-sub); 
+                        cursor: pointer; 
+                        transition: all 0.2s; 
+                        text-align: left;
+                    ">
+                        <span style="font-size: 1.5rem;">🧑‍🏫</span>
+                        <div>
+                            <div style="font-weight: 700; font-size: 1rem; color: var(--color-text-main);">Teacher Mode</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 2px;">Guidance, specific tips, and corrections</div>
+                        </div>
+                    </button>
+                    
+                    <button id="mode-immersive" class="mode-btn" style="
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        padding: 16px; 
+                        border-radius: var(--radius-md); 
+                        border: 1px solid transparent; 
+                        background: rgba(255,255,255,0.03); 
+                        color: var(--color-text-sub); 
+                        cursor: pointer; 
+                        transition: all 0.2s; 
+                        text-align: left;
+                    ">
+                        <span style="font-size: 1.5rem;">🎭</span>
+                        <div>
+                            <div style="font-weight: 700; font-size: 1rem; color: var(--color-text-main);">Immersive Roleplay</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 2px;">Strict roleplay, no breaks in character</div>
+                        </div>
+                    </button>
+                </div>
             </div>
-          </div>
-
-          <div style="height: 1px; background: #eee; margin: var(--spacing-lg) 0;"></div>
-
-          <label style="display: block; font-weight: bold; margin-bottom: var(--spacing-md); color: var(--color-accent-primary);">Mode</label>
-
-          <div style="display: flex; gap: var(--spacing-md);">
-              <button id="mode-teacher" class="mode-btn" style="
-                  flex: 1;
-                  padding: var(--spacing-sm) var(--spacing-md);
-                  border-radius: var(--radius-lg);
-                  border: 2px solid transparent;
-                  background: transparent;
-                  cursor: pointer;
-                  display: flex; flex-direction: row; align-items: center; justify-content: center; gap: var(--spacing-sm);
-                  transition: all 0.2s;
-                  text-align: left;
-              ">
-                  <span style="font-size: 1.5rem;">🧑‍🏫</span>
-                  <div>
-                      <span style="font-weight: bold; font-size: 1rem; display: block;">Teacher</span>
-                      <span style="font-size: 0.75rem; opacity: 0.7; line-height: 1.2; display: block;">
-                          Helpful explanations, native allowed.
-                      </span>
-                  </div>
-              </button>
-
-              <button id="mode-immersive" class="mode-btn" style="
-                  flex: 1;
-                  padding: var(--spacing-sm) var(--spacing-md);
-                  border-radius: var(--radius-lg);
-                  border: 2px solid transparent;
-                  background: transparent;
-                  cursor: pointer;
-                  display: flex; flex-direction: row; align-items: center; justify-content: center; gap: var(--spacing-sm);
-                  transition: all 0.2s;
-                  text-align: left;
-              ">
-                  <span style="font-size: 1.5rem;">🎭</span>
-                   <div>
-                      <span style="font-weight: bold; font-size: 1rem; display: block;">Immersive</span>
-                      <span style="font-size: 0.75rem; opacity: 0.7; line-height: 1.2; display: block;">
-                          Graded, strict roleplay.
-                      </span>
-                  </div>
-              </button>
-          </div>
         </div>
 
+        <div style="margin-bottom: var(--spacing-md); text-align: center;">
+            <h2 style="font-size: 2.5rem; letter-spacing: -0.03em; margin-bottom: var(--spacing-xs);">Choose Your Quest</h2>
+            <p style="opacity: 0.7; font-size: 1.1rem;">Select a scenario to begin your immersive practice</p>
+        </div>
 
-
-        <div class="missions-list">
+        <div class="missions-list mission-grid">
           <!-- Missions will be injected here -->
         </div>
 
+        <!-- Developer Control Center -->
         <div style="
-            margin-top: var(--spacing-sm);
+            margin-top: var(--spacing-lg);
             margin-bottom: var(--spacing-xl);
-            padding: var(--spacing-xl);
-            background: linear-gradient(135deg, rgba(var(--color-accent-primary-rgb), 0.1) 0%, rgba(var(--color-accent-secondary-rgb), 0.1) 100%);
-            border-radius: var(--radius-lg);
-            text-align: center;
-            border: 1px dashed var(--color-accent-primary);
+            position: relative;
         ">
-            <h3 style="margin-bottom: var(--spacing-sm); color: var(--color-accent-primary);"> Build Your Own Version </h3>
-            <p style="margin-bottom: var(--spacing-lg); opacity: 0.8; line-height: 1.5;">
-                Add more missions or features <br>
-            </p>
-            
-                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;">
-                    <a href="https://github.com/ZackAkil/immersive-language-learning-with-live-api" target="_blank" style="
-                        display: inline-flex;
-                        align-items: center;
-                        gap: 8px;
-                        background: white;
-                        color: var(--color-text-primary);
-                        padding: var(--spacing-md) var(--spacing-lg);
-                        border-radius: var(--radius-full);
-                        text-decoration: none;
-                        font-weight: bold;
-                        box-shadow: var(--shadow-sm);
-                        transition: transform 0.2s;
-                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                        Fork on GitHub
-                    </a>
-
-                    <a href="https://deploy.cloud.run/?git_repo=https://github.com/ZackAkil/immersive-language-learning-with-live-api" target="_blank" style="
-                        display: inline-flex;
-                        align-items: center;
-                        gap: 8px;
-                        background: white;
-                        color: #1a73e8;
-                        padding: var(--spacing-md) var(--spacing-lg);
-                        border-radius: var(--radius-full);
-                        text-decoration: none;
-                        font-weight: bold;
-                        box-shadow: var(--shadow-sm);
-                        transition: transform 0.2s;
-                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                        <img src="https://www.gstatic.com/images/branding/product/1x/google_cloud_48dp.png" width="20" height="20" alt="Cloud Run Logo" />
-                        Deploy to Cloud Run
-                    </a>
+            <div style="
+                background: var(--color-surface);
+                backdrop-filter: blur(20px);
+                border: var(--glass-border);
+                border-radius: var(--radius-lg);
+                padding: 0;
+                overflow: hidden;
+                box-shadow: var(--shadow-md);
+            ">
+                 <!-- Terminal Header -->
+                <div style="
+                    background: rgba(0,0,0,0.05);
+                    padding: 12px 20px;
+                    border-bottom: var(--glass-border);
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                ">
+                    <div style="display: flex; gap: 6px;">
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56; opacity: 0.8;"></div>
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e; opacity: 0.8;"></div>
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: #27c93f; opacity: 0.8;"></div>
+                    </div>
+                    <div style="font-family: 'Courier New', monospace; font-size: 0.8rem; opacity: 0.5; margin-left: 10px; color: var(--color-text-main);">developer_mode.sh</div>
                 </div>
+
+                <div style="padding: var(--spacing-xl); display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-xl); flex-wrap: wrap;">
+                    <div style="flex: 2; min-width: 300px;">
+                        <h3 style="
+                            font-family: 'Courier New', monospace; 
+                            color: var(--color-accent-primary); 
+                            margin-bottom: var(--spacing-sm);
+                            font-size: 1.4rem;
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                        ">
+                            <span style="opacity: 0.5;">></span> Deploy Your Own Version
+                        </h3>
+                        <p style="opacity: 0.7; font-size: 1rem; line-height: 1.6; max-width: 500px; color: var(--color-text-sub);">
+                            Launch your own personalized instance in just 1-click. Customize scenarios, add new languages, or rewrite the world.
+                        </p>
+                    </div>
+
+                    <div style="flex: 1; display: flex; justify-content: flex-end; gap: var(--spacing-md);">
+
+
+                        <a href="https://deploy.cloud.run/?git_repo=https://github.com/ZackAkil/immersive-language-learning-with-live-api" target="_blank" style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 12px;
+                            padding: 16px 32px;
+                            border-radius: var(--radius-md);
+                            color: #1a73e8;
+                            background: rgba(26, 115, 232, 0.05);
+                            text-decoration: none;
+                            font-weight: 800;
+                            box-shadow: 0 4px 15px rgba(26, 115, 232, 0.1);
+                            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                            font-size: 1.1rem;
+                            white-space: nowrap;
+                            border: 2px dashed #1a73e8;
+                        " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(26, 115, 232, 0.2)'; this.style.background='rgba(26, 115, 232, 0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(26, 115, 232, 0.1)'; this.style.background='rgba(26, 115, 232, 0.05)';" >
+                            <img src="https://www.gstatic.com/images/branding/product/1x/google_cloud_48dp.png" width="24" height="24" alt="Cloud Run Logo" />
+                            Deploy to Cloud Run
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
       </div>
     `;
@@ -234,23 +295,26 @@ class ViewMissions extends HTMLElement {
     let currentMode = localStorage.getItem('immergo_mode') || 'immergo_immersive'; // Default to immersive
 
     const updateModeUI = () => {
+      const activeBorder = 'var(--color-accent-primary)';
+      const activeBg = 'rgba(163, 177, 138, 0.1)';
+
       // Reset styles
       [modeTeacher, modeImmersive].forEach(btn => {
+        btn.style.background = 'rgba(255,255,255,0.03)';
         btn.style.borderColor = 'transparent';
-        btn.style.background = 'transparent';
-        btn.style.transform = 'scale(1)';
         btn.style.boxShadow = 'none';
-        btn.style.opacity = '0.5'; // Inactive state
+        btn.querySelector('div > div:first-child').style.color = 'var(--color-text-main)'; // Title
+        btn.style.transform = 'translateY(0)';
       });
 
+      // Active State
       const activeBtn = currentMode === 'immergo_teacher' ? modeTeacher : modeImmersive;
 
-      // Active style
-      activeBtn.style.borderColor = 'var(--color-accent-secondary)';
-      activeBtn.style.background = 'white';
-      activeBtn.style.transform = 'scale(1)';
-      activeBtn.style.boxShadow = 'var(--shadow-md)';
-      activeBtn.style.opacity = '1';
+      activeBtn.style.background = activeBg;
+      activeBtn.style.borderColor = activeBorder;
+      activeBtn.style.boxShadow = '0 4px 20px rgba(163, 177, 138, 0.15)';
+      activeBtn.querySelector('div > div:first-child').style.color = activeBorder;
+      activeBtn.style.transform = 'translateY(-2px)';
     };
 
     modeImmersive.addEventListener('click', () => {
@@ -279,8 +343,20 @@ class ViewMissions extends HTMLElement {
 
   renderMissions() {
     const missions = missionsData;
-
     const listContainer = this.querySelector('.missions-list');
+
+    const getMissionIcon = (title) => {
+      if (title.includes('Coffee')) return '☕';
+      if (title.includes('Bus')) return '🚌';
+      if (title.includes('dinner')) return '🍕';
+      if (title.includes('Shirt')) return '👕';
+      if (title.includes('directions')) return '🗺️';
+      if (title.includes('Symptoms')) return '🤒';
+      if (title.includes('Market')) return '🍎';
+      if (title.includes('rent')) return '🏠';
+      if (title.includes('Job')) return '💼';
+      return '📜';
+    };
 
     missions.forEach(mission => {
       const card = document.createElement('div');
@@ -297,19 +373,25 @@ class ViewMissions extends HTMLElement {
 
 
       card.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-xs);">
-          <h3 style="margin: 0; font-size: 1.1rem;">${mission.title}</h3>
-          <span style="
-            background: ${badgeColor}33;
-            color: ${badgeColor};
-            padding: 2px 8px;
-            border-radius: var(--radius-sm);
-            font-size: 0.8rem;
-            font-weight: 700;
-            display: inline-block;
-          ">${mission.difficulty}</span>
+        <div style="margin-bottom: var(--spacing-md); display: flex; justify-content: space-between; align-items: start;">
+            <div style="font-size: 2.5rem; line-height: 1;">${getMissionIcon(mission.title)}</div>
+            <span style="
+                background: ${badgeColor}22;
+                color: ${badgeColor};
+                padding: 4px 8px;
+                border-radius: var(--radius-sm);
+                font-size: 0.75rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                border: 1px solid ${badgeColor}44;
+            ">${mission.difficulty}</span>
         </div>
-        <p style="margin: 0; font-size: 0.9rem;">${mission.desc}</p>
+        <h3 style="margin: 0 0 var(--spacing-sm) 0; font-size: 1.4rem; line-height: 1.2;">${mission.title}</h3>
+        <p style="margin: 0; font-size: 0.95rem; opacity: 0.7; line-height: 1.5;">${mission.desc}</p>
+        <div style="margin-top: auto; padding-top: var(--spacing-md); font-size: 0.8rem; color: var(--color-accent-secondary); font-weight: bold; opacity: 0.8;">
+            Roleplay: ${mission.target_role}
+        </div>
       `;
 
       card.addEventListener('click', () => {

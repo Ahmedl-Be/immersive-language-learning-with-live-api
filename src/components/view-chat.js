@@ -145,30 +145,75 @@ class ViewChat extends HTMLElement {
           </div>
         </div>
 
-        <div style="margin-bottom: var(--spacing-xxl); display: flex; flex-direction: column; gap: var(--spacing-lg); align-items: center;">
-           
-           <button id="mic-btn" style="
+        <style>
+          .chat-cta-btn {
             background: var(--color-accent-primary);
             color: white;
-            padding: var(--spacing-lg) var(--spacing-xl);
-            border-radius: var(--radius-full);
-            width: auto; height: auto;
-            min-width: 200px;
-            box-shadow: var(--shadow-md);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 2;
-            transition: all 0.3s ease;
-          ">
-            <span style="font-size: 1.2rem; font-weight: bold; margin-bottom: 4px;">Start Mission</span>
-            <span style="font-size: 0.8rem; opacity: 0.9;">You start the conversation!</span>
+            padding: 24px 48px;
+            border-radius: var(--radius-lg);
+            width: auto;
+            min-width: 280px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5),
+                        0 0 0 1px rgba(255,255,255,0.2) inset;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            overflow: hidden;
+            font-family: var(--font-body);
+          }
+
+          .chat-cta-btn:hover {
+            transform: translateY(-5px) scale(1.02);
+            filter: brightness(1.1);
+            box-shadow: 0 20px 40px -10px rgba(163, 177, 138, 0.4),
+                        0 0 0 2px rgba(255,255,255,0.3) inset;
+          }
+
+          .chat-cta-btn:active {
+            transform: translateY(-2px) scale(0.98);
+          }
+
+          .chat-cta-btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 200%; height: 100%;
+            background: linear-gradient(115deg, transparent 0%, transparent 45%, rgba(255, 255, 255, 0.3) 50%, transparent 55%, transparent 100%);
+            transform: translateX(-150%) skewX(-15deg);
+            transition: transform 0.6s;
+          }
+
+          .chat-cta-btn:hover::after {
+            transform: translateX(150%) skewX(-15deg);
+          }
+
+          .chat-cta-btn.active {
+            background: var(--color-danger) !important;
+            flex-direction: row !important;
+            gap: 12px;
+          }
+        </style>
+
+        <div style="margin-bottom: var(--spacing-xxl); display: flex; flex-direction: column; gap: var(--spacing-lg); align-items: center;">
+           
+           <button id="mic-btn" class="chat-cta-btn">
+            <span style="font-size: 1.3rem; font-weight: 800; margin-bottom: 2px; letter-spacing: 0.02em;">Start Mission</span>
+            <span style="font-size: 0.85rem; opacity: 0.9; font-style: italic;">You start the conversation!</span>
           </button>
 
            <p id="connection-status" style="
              margin-top: var(--spacing-sm);
              font-size: 0.9rem;
-             font-weight: bold;
+             font-weight: 700;
              height: 1.2em;
              transition: all 0.3s ease;
+             letter-spacing: 0.05em;
+             text-transform: uppercase;
            "></p>
         </div>
 
@@ -411,20 +456,17 @@ class ViewChat extends HTMLElement {
 
     micBtn.addEventListener("click", async () => {
       isSpeaking = !isSpeaking;
-      micBtn.style.background = isSpeaking
-        ? "#2c2c2c"
-        : "var(--color-accent-primary)";
 
       if (isSpeaking) {
+        micBtn.classList.add('active');
         // Change to Stop/Listening state
         micBtn.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
-                    <span style="margin-left: 8px;">End Mission</span>
-                `;
-        micBtn.style.flexDirection = "row";
-        micBtn.style.background = "var(--color-danger)"; // Red for end
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+            <span style="font-weight: 800; font-size: 1.1rem; letter-spacing: 0.05em; text-transform: uppercase;">End Mission</span>
+        `;
       } else {
         // Was active, so stopping now
+        micBtn.classList.remove('active');
         doEndSession();
         return; // Stop here, don't execute start logic
       }
@@ -534,7 +576,11 @@ When the user has successfully achieved the mission objective declared in the sc
             // Let's proceed and let server reject if needed, or stop.
             // For now, let's stop to be safe.
             isSpeaking = false;
-            micBtn.style.background = "var(--color-accent-primary)";
+            micBtn.classList.remove('active');
+            micBtn.innerHTML = `
+                <span style="font-size: 1.3rem; font-weight: 800; margin-bottom: 2px; letter-spacing: 0.02em;">Start Mission</span>
+                <span style="font-size: 0.85rem; opacity: 0.9; font-style: italic;">You start the conversation!</span>
+            `;
             userViz.disconnect();
             modelViz.disconnect();
             statusEl.textContent = "";
@@ -582,13 +628,12 @@ When the user has successfully achieved the mission objective declared in the sc
           console.log("Error status:", err.status); // Debug status
 
           isSpeaking = false;
-          micBtn.style.background = "var(--color-accent-primary)";
+          micBtn.classList.remove('active');
           // Reset button content to "Start Mission"
           micBtn.innerHTML = `
-                        <span style="font-size: 1.2rem; font-weight: bold; margin-bottom: 4px;">Start Mission</span>
-                        <span style="font-size: 0.8rem; opacity: 0.9;">You start the conversation!</span>
-                    `;
-          micBtn.style.flexDirection = "column";
+              <span style="font-size: 1.3rem; font-weight: 800; margin-bottom: 2px; letter-spacing: 0.02em;">Start Mission</span>
+              <span style="font-size: 0.85rem; opacity: 0.9; font-style: italic;">You start the conversation!</span>
+          `;
 
           userViz.disconnect();
           modelViz.disconnect();

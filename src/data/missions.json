@@ -41,13 +41,7 @@
     "desc": "You are lost in Paris.",
     "target_role": "Local Parisian"
   },
-  {
-    "id": 7,
-    "title": "Explain Symptoms",
-    "difficulty": "Hard",
-    "desc": "You have a headache and fever.",
-    "target_role": "Calm Doctor"
-  },
+
   {
     "id": 8,
     "title": "Market Bargaining",
