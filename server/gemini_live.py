@@ -162,6 +162,11 @@ class GeminiLive:
                             tool_call = response.tool_call
                             
                             if server_content:
+
+                                # for token usage
+                                # if response.usage_metadata:
+                                #     print("💰 Usage metadata:", response.usage_metadata)
+
                                 if server_content.model_turn:
                                     for part in server_content.model_turn.parts:
                                         if part.inline_data:
